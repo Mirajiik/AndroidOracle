@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AndroidOracle"
+             x:Class="AndroidOracle.MainPage">
+    <ContentPage.BindingContext>
+        <local:MainWindowViewModel/>
+    </ContentPage.BindingContext>
+    <Grid>
+        <BoxView>
+            <BoxView.Background>
+                <LinearGradientBrush>
+                    <GradientStop Color="#1A1A1A" Offset="0"/>
+                    <GradientStop Color="#434343" Offset="1"/>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+        <StackLayout>
+            <Label Text="Оракул" TextColor="WhiteSmoke" HorizontalOptions="Center" FontSize="64" FontFamily="Philosopher"/>
+            <Image Source="eye_white.png" HeightRequest="80" HorizontalOptions="Center" VerticalOptions="Start"/>
+            <Grid Padding="10" HeightRequest="50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="1 Ответ" FontSize="20" Grid.Column="0" HorizontalTextAlignment="End"/>
+                <Switch IsToggled="{Binding AnswerSwitcher}" OnColor="#34383D" Grid.Column="1" HorizontalOptions="Center"/>
+                <Label Text="До 3 ответов" FontSize="20" Grid.Column="2" HorizontalTextAlignment="Start"/>
+            </Grid>
+            <ListView ItemsSource="{Binding HistoryAnswers}" HasUnevenRows="True" SeparatorColor="Gray" HorizontalOptions="CenterAndExpand"
+                      VerticalOptions="Center" SelectionMode="None" Margin="20" SeparatorVisibility="None">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell ChildAdded="AnswersAnimate">
+                            <ViewCell.View>
+                                <StackLayout>
+                                    <Label Padding="20, 10" Text="{Binding .}" FontSize="18" TextColor="Gray" HorizontalOptions="Center">
+                                        <Label.Triggers>
+                                            <Trigger TargetType="Label" Property="Text" Value="Нет">
+                                                <Setter Property="TextColor" Value="#5c4f4f"/>
+                                            </Trigger>
+                                            <Trigger TargetType="Label" Property="Text" Value="Да">
+                                                <Setter Property="TextColor" Value="#555c4f"/>
+                                            </Trigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Line X1="-150" X2="150" Stroke="Gray" HorizontalOptions="Center">
+                                    </Line>
+                                </StackLayout>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label Text="{Binding Answer}" x:Name="LabelAnswer" FontSize="42" FontFamily="Philosopher" TextColor="White" HorizontalOptions="Center"
+                   PropertyChanged="FadeAnswer">
+                <Label.Triggers>
+                    <Trigger TargetType="Label" Property="Text" Value="Нет">
+                        <Setter Property="TextColor" Value="#8c6c6c"/>
+                    </Trigger>
+                    <Trigger TargetType="Label" Property="Text" Value="Да">
+                        <Setter Property="TextColor" Value="#7cac7c"/>
+                    </Trigger>
+                </Label.Triggers>
+            </Label>
+
+            <Button VerticalOptions="End" HorizontalOptions="Center" WidthRequest="200" Margin="15" Text="Узнать ответ"
+                BackgroundColor="#211D26" BorderWidth="2" BorderColor="#333333" CornerRadius="25" Command="{Binding GenerateAnswersCommand}"/>
+        </StackLayout>
+    </Grid>
+
+</ContentPage>
